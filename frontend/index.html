@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Workforce AI Assistant</title>
+  <style>
+    :root {
+      --ink: #1e2a2f;
+      --muted: #66757b;
+      --paper: #f7f5ef;
+      --panel: #fffdf8;
+      --teal: #176b68;
+      --teal-light: #e6f1ef;
+      --coral: #d86b4a;
+      --line: #d9ddd6;
+      --badge-sql: #2b5b84;
+      --badge-rag: #3d7a5a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: Georgia, 'Times New Roman', serif;
+      background: linear-gradient(135deg, #e9f0e9 0%, var(--paper) 48%, #f4e4d8 100%);
+    }
+    main {
+      width: min(960px, 100%);
+      margin: 0 auto;
+      padding: 36px 20px 24px;
+    }
+    header {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 20px;
+    }
+    .eyebrow {
+      color: var(--coral);
+      font: 700 12px system-ui, sans-serif;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 8px 0 6px;
+      font-size: clamp(30px, 5vw, 48px);
+      font-weight: 500;
+      line-height: 1.1;
+    }
+    header p {
+      margin: 0;
+      color: var(--muted);
+      font: 15px system-ui, sans-serif;
+    }
+    #chat {
+      min-height: 340px;
+      max-height: 52vh;
+      overflow-y: auto;
+      padding: 20px 0;
+    }
+    .message-wrap {
+      display: flex;
+      flex-direction: column;
+      margin: 12px 0;
+    }
+    .message {
+      max-width: 82%;
+      padding: 13px 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font: 15px/1.5 system-ui, sans-serif;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .message.assistant {
+      align-self: flex-start;
+      background: var(--panel);
+    }
+    .message.user {
+      align-self: flex-end;
+      color: white;
+      background: var(--teal);
+      border-color: var(--teal);
+    }
+    .meta-tag {
+      align-self: flex-start;
+      margin-top: 4px;
+      margin-left: 2px;
+      font: 600 11px system-ui, sans-serif;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .loading {
+      color: var(--muted);
+      font-style: italic;
+    }
+    .examples-header {
+      font: 600 12px system-ui, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .examples {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+    .examples button {
+      border: 1px solid var(--teal);
+      border-radius: 16px;
+      padding: 6px 12px;
+      color: var(--teal);
+      background: var(--panel);
+      cursor: pointer;
+      font: 13px system-ui, sans-serif;
+      transition: all 0.15s ease;
+    }
+    .examples button:hover {
+      background: var(--teal-light);
+    }
+    form {
+      display: flex;
+      gap: 10px;
+    }
+    input {
+      min-width: 0;
+      flex: 1;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 14px;
+      color: var(--ink);
+      background: var(--panel);
+      font: 15px system-ui, sans-serif;
+    }
+    input:focus {
+      outline: 2px solid var(--teal);
+      border-color: transparent;
+    }
+    button[type=submit] {
+      border: 0;
+      border-radius: 6px;
+      padding: 0 24px;
+      color: white;
+      background: var(--coral);
+      cursor: pointer;
+      font: 700 15px system-ui, sans-serif;
+      transition: opacity 0.2s;
+    }
+    button[type=submit]:hover {
+      opacity: 0.9;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+    @media (max-width: 600px) {
+      main { padding-top: 20px; }
+      .message { max-width: 92%; }
+      form { flex-direction: column; }
+      button[type=submit] { min-height: 44px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="eyebrow">Talent Intelligence & Analytics</div>
+      <h1>Workforce AI Assistant</h1>
+      <p>Ask questions about workforce headcount, attrition risk, predictions, or HR knowledge.</p>
+    </header>
+
+    <section id="chat" aria-live="polite">
+      <div class="message-wrap">
+        <div class="message assistant">Hello! I am your AI Workforce Assistant. Ask me a question about workforce metrics, attrition predictions, or HR concepts.</div>
+      </div>
+    </section>
+
+    <div class="examples-header">Sample Questions:</div>
+    <div class="examples" aria-label="Example questions">
+      <button type="button">How many employees are there?</button>
+      <button type="button">How many employees actually left?</button>
+      <button type="button">What is the attrition rate?</button>
+      <button type="button">Which department has the highest attrition?</button>
+      <button type="button">How many employees are predicted to leave?</button>
+      <button type="button">How many employees have high risk?</button>
+      <button type="button">How many employees have medium risk?</button>
+      <button type="button">How many employees have low risk?</button>
+      <button type="button">How many high-risk employees are in each department?</button>
+      <button type="button">What is the average job satisfaction?</button>
+      <button type="button">How many employees work overtime?</button>
+      <button type="button">What is employee attrition?</button>
+      <button type="button">What factors contribute to employee attrition?</button>
+    </div>
+
+    <form id="ask-form">
+      <input id="question" aria-label="Your question" placeholder="Ask a question (e.g., How many employees have high risk?)..." autocomplete="off" required>
+      <button type="submit">Send</button>
+    </form>
+  </main>
+
+  <script>
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('question');
+    const form = document.getElementById('ask-form');
+    const send = form.querySelector('button[type="submit"]');
+
+    function addMessage(text, kind, source) {
+      const wrap = document.createElement('div');
+      wrap.className = 'message-wrap';
+
+      const message = document.createElement('div');
+      message.className = `message ${kind}`;
+      message.textContent = text;
+      wrap.appendChild(message);
+
+      if (source && kind === 'assistant') {
+        const meta = document.createElement('div');
+        meta.className = 'meta-tag';
+        meta.textContent = `Source: ${source}`;
+        wrap.appendChild(meta);
+      }
+
+      chat.appendChild(wrap);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    document.querySelectorAll('.examples button').forEach(button => {
+      button.addEventListener('click', () => {
+        input.value = button.textContent;
+        form.requestSubmit();
+      });
+    });
+
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      const question = input.value.trim();
+      if (!question) return;
+
+      addMessage(question, 'user');
+      input.value = '';
+      send.disabled = true;
+
+      const loadingWrap = document.createElement('div');
+      loadingWrap.className = 'message-wrap';
+      const loading = document.createElement('div');
+      loading.className = 'message assistant loading';
+      loading.textContent = 'Analyzing workforce data...';
+      loadingWrap.appendChild(loading);
+      chat.appendChild(loadingWrap);
+      chat.scrollTop = chat.scrollHeight;
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question })
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.detail || 'Request failed');
+        }
+        loadingWrap.remove();
+        addMessage(data.answer, 'assistant', data.source);
+      } catch (error) {
+        loadingWrap.remove();
+        addMessage(`Unable to reach the assistant: ${error.message}. Ensure the FastAPI server is running.`, 'assistant');
+      } finally {
+        send.disabled = false;
+        input.focus();
+      }
+    });
+  </script>
+</body>
+</html>
