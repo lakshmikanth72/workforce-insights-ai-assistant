@@ -1,0 +1,5 @@
+Employee attrition is the loss of employees from an organization. Attrition rate is commonly calculated as the number of employees who leave divided by the employee population for the measurement period.
+
+Common factors associated with attrition analysis include overtime, job satisfaction, work-life balance, compensation, career progression, years at the company, business travel, and relationships with managers. Association does not prove that a factor causes attrition.
+
+Attrition prediction is a model estimate of the likelihood that an employee may leave. A risk category groups that estimate into a practical level such as low, medium, or high. Predictions should support human review and should not be treated as certain outcomes.
