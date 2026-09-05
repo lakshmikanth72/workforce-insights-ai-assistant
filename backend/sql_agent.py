@@ -172,13 +172,14 @@ def answer_sql_question(question: str) -> Optional[Dict[str, Any]]:
             columns = [description[0] for description in cursor.description]
             rows = [dict(zip(columns, row)) for row in cursor.fetchall()]
         return {"sql": sql, "rows": rows, "explanation": _format_explanation(label, rows)}
-    except Exception as error:
-        return {
-            "sql": sql,
-            "rows": [],
-            "explanation": f"Unable to query PostgreSQL ({label}): {error}. Please verify database connection and views.",
-        }
-    finally:
+except Exception as error:
+    print(f"POSTGRESQL ERROR: {type(error).__name__}: {error}", flush=True)
+    return {
+        "sql": sql,
+        "rows": [],
+        "explanation": f"Unable to query PostgreSQL ({label}): {error}. Please verify database connection and views.",
+    }
+finally:
         if conn:
             try:
                 conn.close()
